@@ -1,0 +1,89 @@
+#!/bin/bash
+yum update -y
+yum install -y httpd
+
+# Inicia o Apache
+systemctl start httpd
+systemctl enable httpd
+
+cat <<EOF > /var/www/html/index.html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Laboratório AWS - Servidor Web</title>
+  <style>
+    body {
+      background: linear-gradient(to right, #1e3c72, #2a5298);
+      color: white;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      padding: 40px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+    h2 {
+      color: #ffd700;
+    }
+    section {
+      background-color: rgba(0,0,0,0.2);
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 800px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.3);
+    }
+    p {
+      font-size: 1.1em;
+      line-height: 1.6em;
+    }
+    .emoji {
+      font-size: 1.4em;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎓 Laboratório AWS - Infraestrutura Manual via Console</h1>
+  <p>Essa aplicação está rodando em uma instância EC2 criada manualmente pela interface da AWS.</p>
+
+  <section>
+    <h2 class="emoji">🌐 Etapa 1: Criar uma VPC</h2>
+    <p>Na aba de <strong>VPC</strong>, criamos uma VPC personalizada com o bloco <code>10.0.0.0/16</code> e DNS habilitado.</p>
+  </section>
+
+  <section>
+    <h2 class="emoji">📦 Etapa 2: Sub-rede Pública</h2>
+    <p>Na mesma VPC, adicionamos uma sub-rede pública (<code>10.0.1.0/24</code>) e ativamos a opção <strong>Map public IP on launch</strong>.</p>
+  </section>
+
+  <section>
+    <h2 class="emoji">🛣️ Etapa 3: Internet Gateway e Rota</h2>
+    <p>Criamos um Internet Gateway, associamos à VPC e configuramos a tabela de rotas para permitir acesso à internet (0.0.0.0/0).</p>
+  </section>
+
+  <section>
+    <h2 class="emoji">🛡️ Etapa 4: Security Group</h2>
+    <p>O grupo de segurança permite tráfego nas portas <strong>22 (SSH)</strong> e <strong>80 (HTTP)</strong> de qualquer origem (<code>0.0.0.0/0</code>).</p>
+  </section>
+
+  <section>
+    <h2 class="emoji">💻 Etapa 5: EC2 Pública</h2>
+    <p>Na aba EC2, lançamos uma instância Amazon Linux 2 (t2.micro), selecionamos a sub-rede pública e colamos este script de inicialização (user data).</p>
+  </section>
+
+  <section>
+    <h2 class="emoji">📁 Etapa 6: (Opcional) S3 para Backups</h2>
+    <p>Você pode criar um bucket no Amazon S3 para armazenar backups ou arquivos da instância EC2.</p>
+  </section>
+
+  <section>
+    <h2 class="emoji">📚 Objetivo do Laboratório</h2>
+    <p>Este lab ensina como construir uma infraestrutura básica na AWS do zero, entendendo cada etapa da rede até a aplicação web em execução.</p>
+  </section>
+
+  <p style="margin-top: 40px;">🔧 Criado via Console AWS | Script automatiza o Apache + HTML 💻</p>
+</body>
+</html>
+EOF

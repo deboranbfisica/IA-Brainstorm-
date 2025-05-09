@@ -1,0 +1,82 @@
+#!/bin/bash
+yum update -y
+yum install -y httpd
+systemctl start httpd
+systemctl enable httpd
+
+# Cria uma página de boas-vindas com instruções do laboratório
+cat <<EOF > /var/www/html/index.html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Laboratório AWS - VPC Completa</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f9ff;
+            color: #1e293b;
+            padding: 40px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2.5em;
+            color: #0ea5e9;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            max-width: 700px;
+            margin: 30px auto;
+        }
+        ul {
+            text-align: left;
+            font-size: 1.1em;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #0ea5e9;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 50px;
+            font-size: 0.9em;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 Bem-vindo ao Laboratório AWS</h1>
+
+    <div class="card">
+        <p>Esta instância está na <strong>sub-rede pública</strong> e funciona como ponto de acesso para o laboratório.</p>
+        <p>Aqui você encontrará um resumo do que foi criado:</p>
+        <ul>
+            <li>🧱 VPC com CIDR <code>10.0.0.0/16</code></li>
+            <li>🌐 Sub-rede pública e privada</li>
+            <li>🔌 Internet Gateway para a pública</li>
+            <li>🛡️ NAT Gateway para a privada</li>
+            <li>🔐 EC2 pública (esta aqui) com IP público</li>
+            <li>👨‍💻 EC2 privada com Apache e acesso via SSH (bastion)</li>
+            <li>📦 Bucket S3 para backups e snapshots</li>
+        </ul>
+
+        <a href="#" class="link">📥 Documentação do Lab (inserir link aqui)</a>
+    </div>
+
+    <div class="footer">
+        Desenvolvido por [Seu Nome] • Treinamento de AWS [escrever turma ou treinameto]
+    </div>
+</body>
+</html>
+EOF
